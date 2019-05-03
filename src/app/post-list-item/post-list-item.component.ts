@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { PostsService } from '../services/posts.service'
 
 @Component({
   selector: 'app-post-list-item',
@@ -12,8 +13,9 @@ export class PostListItemComponent implements OnInit {
     @Input() content: string;
     @Input() loveIts: number;
     @Input() created_at: Date;
+    @Input() id: number;
 
-    constructor() { }
+    constructor(private postsService: PostsService) { }
 
     ngOnInit() {
       // Creation d'une date aléatoire si elle n'est pas envoyée
@@ -28,9 +30,9 @@ export class PostListItemComponent implements OnInit {
     // click sur les bouton, 'love' permet d'avoir une fct commune aux deux boutons
     onLoveIt(love:boolean){
       if(love)
-        this.loveIts++
+        this.postsService.addSomeLove(this)
       else if(!love)
-        this.loveIts--
+        this.postsService.removeSomeLove(this)
     }
 
     // renvoie green red, ou '' selon la valeur de loveIts
@@ -42,6 +44,10 @@ export class PostListItemComponent implements OnInit {
         return 'red'
       }
       return ''
+    }
+
+    onDeletePost(post){
+      this.postsService.removePost(post)
     }
 
   }

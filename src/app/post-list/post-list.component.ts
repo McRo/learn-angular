@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Post } from '../models/Post.model';
+import { PostsService } from '../services/posts.service';
+import { Subscription } from 'rxjs/Subscription';
+
 
 @Component({
   selector: 'app-post-list',
@@ -7,12 +11,19 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PostListComponent implements OnInit {
 
-  // la liste est passée en propriété
-  @Input() list: Array<Object>
+  posts: Post[];
+  postSubscription: Subscription
 
-  constructor() { }
+  constructor(private PostsService: PostsService){}
 
   ngOnInit() {
+    this.postSubscription = this.PostsService.PostSubject.subscribe(
+      (posts: Post[]) => {
+        this.posts = posts
+      }
+    )
+    this.PostsService.getPosts();
+    this.PostsService.emitPosts();
   }
 
 }
