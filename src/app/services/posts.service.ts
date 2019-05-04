@@ -68,6 +68,9 @@ export class PostsService {
   }
 
   addSomeLove(post: Post){
+    // get root post var, not an instance, beacause of emit with slice
+    // i'm not shure i work with the good post
+    // const current_post = post seems to work .. but .. i don't know
     const current_post = this.getSinglePost(post.id)
     current_post.loveIts ++;
     this.emitPosts();
